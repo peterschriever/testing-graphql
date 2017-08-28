@@ -1,17 +1,24 @@
-import Immutable from "immutable";
+import { combineReducers } from 'redux';
 
-const immutableState = Immutable.Map({
-  fetching: false,
-  data: Immutable.Map({})
-})
-
-export const queryReducer = (state = immutableState, action) => {
+const goldbergsReducer = (state = null, action) => {
+  let newState, data;
   switch (action.type) {
-    case "STARTING_REQUEST":
-      return state.set("fetching", true);
-    case "FINISHED_REQUEST":
-      return state.set("fetching", false)
-              .set("data", Immutable.Map(action.response.data.goldberg));
+    case "FETCH_GOLDBERG":
+      if (action.payload.status !== 200) return state;
+      data = action.payload.data.data.goldberg;
+      newState = [data];
+      if (state !== null && typeof state === 'object') {
+        newState = state.concat(newState);
+      }
+      return newState;
+
   }
   return state;
 }
+
+
+const rootReducer = combineReducers({
+  goldbergs: goldbergsReducer,
+});
+
+export default rootReducer;

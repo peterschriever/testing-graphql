@@ -8,26 +8,11 @@ const axios = defaultAxios.create({
   }
 });
 
-const startingRequest = () => {
-  return {
-    type: "STARTING_REQUEST"
-  }
-}
+export const getGraph = (payload, reducerType) => {
+  const result = axios.post('/graphql', payload);
 
-const finishedRequest = (response) => {
   return {
-    type: "FINISHED_REQUEST",
-    response: response
-  }
-}
-
-export const getGraph = (payload) => {
-  return dispatch => {
-    dispatch(startingRequest());
-    return axios.post('/graphql', payload)
-      .then(response => {
-        console.log("dispatching finishedRequest", response);
-        dispatch(finishedRequest(response.data));
-      });
-  }
+    type: reducerType,
+    payload: result
+  };
 }
