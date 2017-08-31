@@ -1,5 +1,0 @@
-type Pokemon {
-  id: ID!
-  name: String!
-  url: String!
-}
